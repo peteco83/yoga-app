@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+/* Import the "Yoga" Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  --yoga-cream: #fdfcf9;
+  --yoga-sage: #8da399;
+  --yoga-dark: #1f3a2d;
+  --yoga-gold: #c5a059;
+  --yoga-white: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--yoga-cream);
+  color: var(--yoga-dark);
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+}
+
+#root-container, app-root {
+  display: block;
+  padding-top: 80px; /* Adjust this to the exact height of your nav */
+}

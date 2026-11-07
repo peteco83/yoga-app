@@ -1,0 +1,139 @@
+/* --- Global Reset & Smooth Scroll --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* This prevents padding from "stretching" the 100% width */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #fff7fb 0%, #f7f1ff 55%, #eef6ff 100%);
+}
+
+/* --- The Main Wrapper --- */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- The Header: Fixed & Adaptive --- */
+.app__header {
+  position: absolute; /* This makes the header "float" over the content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%; /* Adjust spacing to match your design */
+  background: rgba(255, 255, 255, 0.75);
+  border: none !important;  /* Removes the grey line */
+  box-shadow: 0 24px 80px rgba(124, 86, 156, 0.08) !important;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+/* Scrolled state or when on Admin pages (Solid background) */
+.app__header.scrolled {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 5%;
+  box-shadow: 0 2px 20px rgba(124,86,156,0.08) !important;
+}
+
+/* --- Brand/Logo --- */
+.app__brand {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.9rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #5a3f70;
+  text-transform: none;
+}
+
+/* --- Navigation Links --- */
+.app__nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.app__nav a {
+  text-decoration: none;
+  color: #5a3f70;
+  font-size: 0.9rem;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.app__nav a.active {
+  border-bottom: 2px solid #ff8cd8;
+}
+
+.app__nav a:hover {
+  opacity: 0.6;
+}
+
+/* --- Language Picker --- */
+.app__lang-picker {
+  display: flex;
+  gap: 1rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(0,0,0,0.1); /* Very light separator */
+}
+
+.app__lang-picker button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: #ccc; /* Inactive color */
+  transition: color 0.3s;
+}
+
+.app__lang-picker button.active {
+  color: #5a3f70;
+  font-weight: bold;
+}
+
+/* --- Logout Button (Sleek Admin Style) --- */
+.nav-logout {
+  background: #ffe6f5;
+  border: 1px solid #f09cc9;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: #5a3f70;
+  transition: all 0.3s ease;
+}
+
+.nav-logout:hover {
+  background: #f09cc9;
+  color: white;
+}
+
+/* --- The Main Content Area --- */
+.app__main {
+  flex: 1;
+  /* This is the magic fix for the overlapping content: */
+  /* It ensures that sub-pages like /admin or /login start below the nav */
+  margin-top: 0; 
+}
+
+/* Use a helper class or apply logic to non-home pages */
+:not(app-home) > .app__main {
+  padding-top: 10px;
+}

@@ -1,0 +1,137 @@
+<section class="landing">
+  <header class="landing__hero landing__hero--big">
+    <div class="landing__overlay"></div>
+    <div class="landing__hero-content">
+      <p class="landing__subtitle">{{ 'LANDING.HERO_SUBTITLE' | translate }}</p>
+      <h1>{{ 'LANDING.HERO_TITLE' | translate }}</h1>
+      <p>{{ 'LANDING.HERO_DESC' | translate }}</p>
+      <a class="button button--primary" href="#contact">{{ 'LANDING.CTA_BUTTON' | translate }}</a>
+    </div>
+  </header>
+
+  <section class="landing__intro">
+    <h2>{{ 'LANDING.INTRO_TITLE' | translate }}</h2>
+    <p>{{ 'LANDING.INTRO_DESC' | translate }}</p>
+  </section>
+
+  <section class="landing__about">
+    <div class="landing__about-card">
+      <h2>{{ 'LANDING.ABOUT_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.ABOUT_DESC' | translate }}</p>
+    </div>
+  </section>
+
+  <section class="landing__styles">
+    <div class="landing__intro">
+      <h2>{{ 'LANDING.STYLES_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.STYLES_DESC' | translate }}</p>
+    </div>
+    <div class="landing__grid">
+      @for (style of styles; track style.key) {
+        <article class="landing__card">
+          <img [ngSrc]="style.image" width="400" height="300" [alt]="'LANDING.STYLES.' + style.key + '.NAME' | translate" class="landing__image" />
+          <div class="landing__card-content">
+            <h3>{{ 'LANDING.STYLES.' + style.key + '.NAME' | translate }}</h3>
+            <p>{{ 'LANDING.STYLES.' + style.key + '.DESC' | translate }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="landing__benefits">
+    <h2>{{ 'LANDING.BENEFITS_TITLE' | translate }}</h2>
+    <div class="landing__benefit-grid">
+      <article>
+        <h3>{{ 'LANDING.BENEFITS.PERSONAL.TITLE' | translate }}</h3>
+        <p>{{ 'LANDING.BENEFITS.PERSONAL.DESC' | translate }}</p>
+      </article>
+      <article>
+        <h3>{{ 'LANDING.BENEFITS.FLEXIBLE.TITLE' | translate }}</h3>
+        <p>{{ 'LANDING.BENEFITS.FLEXIBLE.DESC' | translate }}</p>
+      </article>
+      <article>
+        <h3>{{ 'LANDING.BENEFITS.STRESS.TITLE' | translate }}</h3>
+        <p>{{ 'LANDING.BENEFITS.STRESS.DESC' | translate }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="landing__contact" id="contact">
+    <h2>{{ 'LANDING.CONTACT_TITLE' | translate }}</h2>
+    <div class="landing__contact-grid">
+      <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="submitContact()">
+        <label>
+          {{ 'FORM.NAME_LABEL' | translate }}
+          <input formControlName="name" type="text" [placeholder]="'FORM.NAME_PLACEHOLDER' | translate" />
+          @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+            <div class="field-error">{{ 'FORM.ERROR_NAME' | translate }}</div>
+          }
+        </label>
+        <label>
+          {{ 'FORM.EMAIL_LABEL' | translate }}
+          <input formControlName="email" type="email" [placeholder]="'FORM.EMAIL_PLACEHOLDER' | translate" />
+          @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+            <div class="field-error">
+              @if (contactForm.get('email')?.errors?.['required']) { <span>{{ 'FORM.ERROR_EMAIL_REQ' | translate }}</span> }
+              @if (contactForm.get('email')?.errors?.['email'] || contactForm.get('email')?.errors?.['pattern']) { <span>{{ 'FORM.ERROR_EMAIL_INV' | translate }}</span> }
+            </div>
+          }
+        </label>
+        <label>
+          {{ 'FORM.MESSAGE_LABEL' | translate }}
+          <textarea formControlName="message" [placeholder]="'FORM.MESSAGE_PLACEHOLDER' | translate" rows="4"></textarea>
+          @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+            <div class="field-error">{{ 'FORM.ERROR_MESSAGE' | translate }}</div>
+          }
+        </label>
+
+        <button type="submit" class="button button--primary" [disabled]="contactLoading || contactForm.invalid">
+          {{ (contactLoading ? 'LANDING.SENDING' : 'LANDING.SEND_MESSAGE') | translate }}
+        </button>
+
+        @if (contactSent) { <div class="status" role="status">{{ 'LANDING.CONTACT_SUCCESS' | translate }}</div> }
+        @if (contactError) { <div class="status error" role="alert">{{ contactError | translate }}</div> }
+      </form>
+    </div>
+  </section>
+
+  <section class="landing__quotes">
+    <h2>{{ 'LANDING.INSPIRATION' | translate }}</h2>
+    @for (i of quoteIndices; track i) {
+      <blockquote class="landing__blockquote">
+        “{{ 'LANDING.QUOTES.' + i | translate }}”
+      </blockquote>
+    }
+  </section>
+
+  <footer class="landing__cta">
+    <h2>{{ 'LANDING.CTA_TITLE' | translate }}</h2>
+    <p>{{ 'LANDING.CTA_DESC' | translate }}</p>
+    <nav class="landing__social" [attr.aria-label]="'LANDING.SOCIAL_LABEL' | translate">
+      <a class="landing__social-link" href="https://www.youtube.com/@Momkari-7" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'LANDING.SOCIAL_YOUTUBE' | translate">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z" />
+        </svg>
+        <span>{{ 'LANDING.SOCIAL_YOUTUBE' | translate }}</span>
+      </a>
+      <a class="landing__social-link" href="https://www.instagram.com/m.omkari_yoga_y_sonido/" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'LANDING.SOCIAL_INSTAGRAM_YOGA' | translate">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="1" class="landing__social-dot" />
+        </svg>
+        <span>{{ 'LANDING.SOCIAL_INSTAGRAM_YOGA' | translate }}</span>
+      </a>
+      <a class="landing__social-link" href="https://www.instagram.com/m.omkari_kids/" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'LANDING.SOCIAL_INSTAGRAM_KIDS' | translate">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="1" class="landing__social-dot" />
+        </svg>
+        <span>{{ 'LANDING.SOCIAL_INSTAGRAM_KIDS' | translate }}</span>
+      </a>
+    </nav>
+    <a class="landing__admin-link" routerLink="/login">{{ 'NAV.ADMIN' | translate }}</a>
+  </footer>
+</section>

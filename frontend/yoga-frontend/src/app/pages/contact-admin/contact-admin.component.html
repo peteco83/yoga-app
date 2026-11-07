@@ -1,0 +1,50 @@
+<section class="contact-admin">
+  <header class="contact-admin__header">
+    <h1>{{ 'NAV.MESSAGES' | translate }}</h1>
+    <a routerLink="/admin" class="back-link">← {{ '' | translate }}</a>
+  </header>
+
+  <div class="status" *ngIf="loading()">{{ 'LANDING.SENDING' | translate }}</div>
+  
+  <table *ngIf="messageList.length">
+    <thead>
+      <tr>
+        <th>Sender</th>
+        <th>Message</th>
+        <th>Assignment</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let msg of messageList">
+        <td>
+          <strong>{{ msg.name }}</strong><br>
+          <small>{{ msg.email }}</small>
+        </td>
+        <td>
+          <div class="msg-text">"{{ msg.message }}"</div>
+          <div class="msg-meta">{{ msg.created_at | date: 'mediumDate' }}</div>
+        </td>
+        <td>
+          <span class="status-badge" [ngClass]="msg.status">{{ msg.status }}</span><br>
+          <small (click)="assign(msg)" style="cursor: pointer; text-decoration: underline">
+            {{ msg.assignee || 'Unassigned' }}
+          </small>
+        </td>
+        <td>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a [href]="mailtoLink(msg.email, msg.name, msg.message)" class="reply-link">REPLY</a>
+            
+            <div>
+              <button class="btn-action" *ngIf="msg.status !== 'read'" (click)="markRead(msg)">Read</button>
+              <button class="btn-action" *ngIf="msg.status === 'read'" (click)="markUnread(msg)">Unread</button>
+              <button (click)="delete(msg)" class="btn-action danger">Delete</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!messageList.length && !loading()">No messages to display.</p>
+</section>

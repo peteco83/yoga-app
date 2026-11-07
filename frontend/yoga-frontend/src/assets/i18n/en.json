@@ -1,0 +1,63 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "MEMBERS": "Members",
+    "MESSAGES": "Messages",
+    "LOGIN": "Login",
+    "ADMIN": "Admin access"
+  },
+  "FORM": {
+    "NAME_LABEL": "Full name",
+    "NAME_PLACEHOLDER": "Your name",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "your@email.com",
+    "MESSAGE_LABEL": "Message",
+    "MESSAGE_PLACEHOLDER": "How can we help?",
+    "ERROR_NAME": "Name is required.",
+    "ERROR_EMAIL_REQ": "Email is required.",
+    "ERROR_EMAIL_INV": "Invalid email format.",
+    "ERROR_MESSAGE": "Message is required."
+  },
+  "LANDING": {
+    "HERO_TITLE": "Momkari Yoga Studio",
+    "HERO_SUBTITLE": "Children's yoga and meditation in Münchenbuchsee",
+    "HERO_DESC": "Playful movement, mindful breathing, and calm moments that help children feel confident, connected, and at ease.",
+    "INTRO_TITLE": "A calm space for children and families",
+    "INTRO_DESC": "I offer warm, age-appropriate children's yoga and meditation in Münchenbuchsee, with stories, movement, breathing, and time to settle.",
+    "ABOUT_TITLE": "Yoga and meditation for young minds",
+    "ABOUT_DESC": "Each session combines playful yoga, simple mindfulness, and relaxation in a safe, encouraging setting where children can move, imagine, and be themselves.",
+    "STYLES_TITLE": "Choose a gentle beginning",
+    "STYLES_DESC": "Discover playful children's yoga, calming meditation, and sound baths for rest, connection, and joyful wellbeing.",
+    "BENEFITS_TITLE": "Why families choose these sessions",
+    "BENEFITS": {
+      "PERSONAL": { "TITLE": "A safe, playful approach", "DESC": "Warm guidance, imaginative movement, and age-appropriate practices for every child." },
+      "FLEXIBLE": { "TITLE": "For children and families", "DESC": "Sessions designed for little yogis, parents, and shared moments of connection." },
+      "STRESS": { "TITLE": "Calm and confidence", "DESC": "Breathing, relaxation, and mindful movement to help children feel grounded and capable." }
+    },
+    "CONTACT_TITLE": "Ready to begin?",
+    "CONTACT_SUCCESS": "Thank you! Your class request is on its way.",
+    "CONTACT_ERROR": "Message could not be sent. Please try again.",
+    "SEND_MESSAGE": "Request a trial class",
+    "SENDING": "Sending...",
+    "INSPIRATION": "Small moments make a difference",
+    "QUOTES": [
+      "A teacher’s guidance makes every pose feel safe and meaningful.",
+      "Children discover calm through stories, movement, and playful breathwork.",
+      "A few mindful minutes can change the feeling of an entire afternoon.",
+      "Every session leaves room for movement, imagination, and rest."
+    ],
+    "CTA_TITLE": "A gentle start in Münchenbuchsee",
+    "CTA_DESC": "Get in touch to find the right children's yoga or meditation session for your family.",
+    "CTA_BUTTON": "Request a trial class",
+    "SOCIAL_LABEL": "Social media",
+    "SOCIAL_YOUTUBE": "YouTube channel",
+    "SOCIAL_INSTAGRAM_YOGA": "M.omkari Yoga & Sound",
+    "SOCIAL_INSTAGRAM_KIDS": "M.omkari Kids",
+    "STYLES": {
+      "FAMILY_YOGA": { "NAME": "Family Yoga", "DESC": "Fun partner poses, gentle stretches, and breathing exercises for children and parents." },
+      "KIDS_STORY": { "NAME": "Story Yoga for Kids", "DESC": "Playful adventures, animal poses, and imaginative movement designed for young learners." },
+      "KIDS_MEDITATION": { "NAME": "Meditation for Kids", "DESC": "A gentle introduction to stillness, breathing, and mindful listening for children." },
+      "SOUND_BATH": { "NAME": "Sound Bath", "DESC": "Relax into warm singing-bowl sounds and peaceful moments for the whole family." }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "NAV": {
+    "HOME": "Startseite",
+    "MEMBERS": "Mitglieder",
+    "MESSAGES": "Nachrichten",
+    "LOGIN": "Anmelden",
+    "ADMIN": "Admin-Zugang"
+  },
+  "FORM": {
+    "NAME_LABEL": "Vollständiger Name",
+    "NAME_PLACEHOLDER": "Dein Name",
+    "EMAIL_LABEL": "E-Mail",
+    "EMAIL_PLACEHOLDER": "deine@email.com",
+    "MESSAGE_LABEL": "Nachricht",
+    "MESSAGE_PLACEHOLDER": "Wie können wir helfen?",
+    "ERROR_NAME": "Name ist erforderlich.",
+    "ERROR_EMAIL_REQ": "E-Mail ist erforderlich.",
+    "ERROR_EMAIL_INV": "Ungültiges E-Mail-Format.",
+    "ERROR_MESSAGE": "Nachricht ist erforderlich."
+  },
+  "LANDING": {
+    "HERO_TITLE": "Momkari Yoga Studio",
+    "HERO_SUBTITLE": "Kinder-Yoga und Meditation in Münchenbuchsee",
+    "HERO_DESC": "Spielerische Bewegung, bewusste Atmung und ruhige Momente, die Kindern helfen, sich sicher, verbunden und ausgeglichen zu fühlen.",
+    "INTRO_TITLE": "Ein ruhiger Raum für Kinder und Familien",
+    "INTRO_DESC": "Ich biete altersgerechtes Kinder-Yoga und Meditation in Münchenbuchsee an – mit Geschichten, Bewegung, Atemübungen und Zeit zum Ankommen.",
+    "ABOUT_TITLE": "Yoga und Meditation für junge Menschen",
+    "ABOUT_DESC": "Jede Einheit verbindet spielerisches Yoga, einfache Achtsamkeit und Entspannung in einer sicheren, ermutigenden Umgebung, in der Kinder sich bewegen, träumen und selbst sein dürfen.",
+    "STYLES_TITLE": "Ein sanfter Anfang",
+    "STYLES_DESC": "Entdecke spielerisches Kinder-Yoga, ruhige Meditation und Klangbäder für Erholung, Verbindung und Freude.",
+    "BENEFITS_TITLE": "Warum Familien diese Einheiten wählen",
+    "BENEFITS": {
+      "PERSONAL": { "TITLE": "Sicher und spielerisch", "DESC": "Liebevolle Begleitung, fantasievolle Bewegung und altersgerechte Übungen für jedes Kind." },
+      "FLEXIBLE": { "TITLE": "Für Kinder und Familien", "DESC": "Einheiten für kleine Yogis, Eltern und gemeinsame Momente der Verbindung." },
+      "STRESS": { "TITLE": "Ruhe und Selbstvertrauen", "DESC": "Atmung, Entspannung und achtsame Bewegung helfen Kindern, sich sicher und geerdet zu fühlen." }
+    },
+    "CONTACT_TITLE": "Bereit anzufangen?",
+    "CONTACT_SUCCESS": "Danke! Deine Kursanfrage ist unterwegs.",
+    "CONTACT_ERROR": "Nachricht konnte nicht gesendet werden. Bitte versuche es erneut.",
+    "SEND_MESSAGE": "Probestunde anfragen",
+    "SENDING": "Wird gesendet...",
+    "INSPIRATION": "Kleine Momente mit grosser Wirkung",
+    "QUOTES": [
+      "Mit einer guten Anleitung fühlt sich jede Haltung sicher und wertvoll an.",
+      "Kinder entdecken Ruhe durch Geschichten, Bewegung und spielerische Atemübungen.",
+      "Ein paar achtsame Minuten können die Stimmung eines ganzen Nachmittags verändern.",
+      "Jede Einheit lässt Raum für Bewegung, Fantasie und Erholung."
+    ],
+    "CTA_TITLE": "Ein sanfter Anfang in Münchenbuchsee",
+    "CTA_DESC": "Schreib mir, um die passende Kinder-Yoga- oder Meditationseinheit für deine Familie zu finden.",
+    "CTA_BUTTON": "Probestunde anfragen",
+    "SOCIAL_LABEL": "Soziale Medien",
+    "SOCIAL_YOUTUBE": "YouTube-Kanal",
+    "SOCIAL_INSTAGRAM_YOGA": "M.omkari Yoga & Klang",
+    "SOCIAL_INSTAGRAM_KIDS": "M.omkari Kids",
+    "STYLES": {
+      "FAMILY_YOGA": { "NAME": "Familien-Yoga", "DESC": "Partnerübungen, sanfte Dehnungen und Atemübungen für Kinder und Eltern." },
+      "KIDS_STORY": { "NAME": "Geschichten-Yoga für Kinder", "DESC": "Verspielte Abenteuer, Tierhaltungen und fantasievolle Bewegung für junge Lernende." },
+      "KIDS_MEDITATION": { "NAME": "Meditation für Kinder", "DESC": "Ein sanfter Einstieg in Ruhe, Atmung und bewusstes Zuhören für Kinder." },
+      "SOUND_BATH": { "NAME": "Klangbad", "DESC": "Entspanne mit warmen Klängen von Klangschalen und ruhigen Momenten für die ganze Familie." }
+    }
+  }
+}

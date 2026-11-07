@@ -1,0 +1,36 @@
+<div class="app">
+  <header class="app__header" [class.scrolled]="scrolled() || auth.isLoggedIn()">
+    <a routerLink="/" class="app__brand">Momkari Yoga</a>
+    
+    <nav class="app__nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        {{ 'NAV.HOME' | translate }}
+      </a>
+      
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/admin" routerLinkActive="active">
+          {{ 'NAV.MEMBERS' | translate }}
+        </a>
+        <a routerLink="/admin/messages" routerLinkActive="active">
+          {{ 'NAV.MESSAGES' | translate }}
+        </a>
+      }
+
+      <div class="app__lang-picker">
+        <button (click)="switchLanguage('en')" [class.active]="currentLang() === 'en'">EN</button>
+        <button (click)="switchLanguage('de')" [class.active]="currentLang() === 'de'">DE</button>
+        <button (click)="switchLanguage('es')" [class.active]="currentLang() === 'es'">ES</button>
+      </div>
+
+      @if (auth.isLoggedIn()) {
+        <button (click)="logout()" class="nav-logout">
+          Logout
+        </button>
+      }
+    </nav>
+  </header>
+
+  <main class="app__main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

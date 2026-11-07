@@ -1,0 +1,422 @@
+/* --- Global Overrides for the Landing Page --- */
+.landing {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  color: #3b3a47;
+  line-height: 1.75;
+  background: radial-gradient(circle at top, #f9f6f0 0%, #f7f3ef 40%, #eef3f7 100%);
+}
+
+/* --- Layout Alignment --- */
+.landing__intro,
+.landing__benefits,
+.landing__contact,
+.landing__cta,
+.landing__hero-content,
+.landing__quotes h2 {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10%;
+  padding-right: 10%;
+  box-sizing: border-box;
+}
+
+.landing > section {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+/* --- Hero Section --- */
+.landing__hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(250, 245, 237, 0.45), rgba(241, 246, 250, 0.45)),
+    url('/assets/images/hero-kids-meditation.png') center/cover no-repeat;
+  overflow: hidden;
+}
+
+.landing__hero::before,
+.landing__hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.35;
+}
+
+.landing__hero::before {
+  width: 320px;
+  height: 320px;
+  top: -80px;
+  right: -80px;
+  background: #ffd5f1;
+}
+
+.landing__hero::after {
+  width: 220px;
+  height: 220px;
+  bottom: -40px;
+  left: -40px;
+  background: #d5f3ff;
+}
+
+.landing__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.landing__hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #4c3f62;
+  padding: 2rem 1.5rem;
+  backdrop-filter: blur(6px);
+}
+
+.landing__hero-content h1 {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  margin: 0.4rem auto;
+  letter-spacing: -1px;
+  color: #5a3f70;
+}
+
+.landing__subtitle {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  padding: 0.8rem 1.6rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #a54f8b;
+  margin-bottom: 1rem;
+}
+
+.landing__hero-content p {
+  max-width: 750px;
+  margin: 1.5rem auto 0;
+  font-size: 1.1rem;
+  color: #5c4b6b;
+}
+
+/* --- Typography --- */
+h2 {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #5a3f70;
+  margin-bottom: 1.5rem;
+}
+
+.landing__intro p,
+.landing__benefits p,
+.landing__contact p,
+.landing__cta p {
+  font-size: 1.05rem;
+  color: #5c4b6b;
+  max-width: 860px;
+}
+
+.landing__about {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 10%;
+}
+
+.landing__about-card {
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 28px 60px rgba(68, 55, 77, 0.08);
+  padding: 2.5rem;
+  max-width: 900px;
+  text-align: center;
+}
+
+.landing__about-card h2 {
+  margin-bottom: 1rem;
+  color: #4c3f62;
+}
+
+.landing__about-card p {
+  margin: 0;
+  color: #5c4b6b;
+}
+
+/* --- Styles Grid --- */
+.landing__styles {
+  background: linear-gradient(180deg, rgba(255, 250, 247, 0.72), rgba(245, 240, 255, 0.72));
+}
+
+.landing__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+.landing__card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 32px;
+  box-shadow: 0 28px 60px rgba(96, 64, 112, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing__card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 36px 70px rgba(96, 64, 112, 0.12);
+}
+
+.landing__image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(76, 63, 98, 0.08);
+}
+
+.landing__card-content {
+  padding: 1.75rem;
+}
+
+.landing__card-content h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.9rem;
+  color: #5a3f70;
+}
+
+.landing__card-content p {
+  color: #6f5b7d;
+  line-height: 1.7;
+}
+
+/* --- Benefits Section --- */
+.landing__benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.landing__benefit-grid > article {
+  background: #fff5fe;
+  border: 1px solid rgba(165, 79, 139, 0.16);
+  border-radius: 26px;
+  padding: 2rem;
+}
+
+.landing__benefit-grid h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.landing__benefit-grid p {
+  color: #6f5b7d;
+}
+
+/* --- Quotes --- */
+.landing__quotes {
+  padding: 5rem 1rem;
+  background-color: #f7f0ff;
+  margin: 3rem 0;
+}
+
+.landing__quotes h2 {
+  text-align: center;
+}
+
+.landing__blockquote {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  text-align: center;
+  color: #5c4b6b;
+}
+
+/* --- Contact Form --- */
+.landing__contact {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.landing__contact-grid {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(165, 79, 139, 0.12);
+  border-radius: 32px;
+  box-shadow: 0 24px 60px rgba(96, 64, 112, 0.08);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.contact-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #5a3f70;
+}
+
+.contact-form input,
+.contact-form textarea {
+  border: 1px solid rgba(92, 75, 107, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 1rem 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #d19dd3;
+  box-shadow: 0 0 0 4px rgba(209, 157, 211, 0.16);
+}
+
+.field-error {
+  color: #d05088;
+  font-size: 0.9rem;
+}
+
+.button {
+  padding: 1rem 2.2rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.button--primary {
+  background: linear-gradient(135deg, #ff8cd8 0%, #7ecbff 100%);
+  color: #fff;
+  box-shadow: 0 14px 35px rgba(152, 80, 140, 0.2);
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(152, 80, 140, 0.24);
+}
+
+.button:disabled {
+  background: #e2d6ed;
+  border-color: #e2d6ed;
+  color: #8a7a98;
+  cursor: not-allowed;
+}
+
+/* --- Footer CTA --- */
+.landing__cta {
+  text-align: center;
+  padding: 6rem 10%;
+}
+
+.landing__cta p {
+  margin: 0 auto 2rem;
+}
+
+.landing__social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.landing__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid rgba(90, 63, 112, 0.16);
+  border-radius: 999px;
+  color: #5a3f70;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.landing__social-link:hover,
+.landing__social-link:focus-visible {
+  transform: translateY(-2px);
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(96, 64, 112, 0.12);
+}
+
+.landing__social-link:focus-visible {
+  outline: 3px solid rgba(126, 203, 255, 0.7);
+  outline-offset: 3px;
+}
+
+.landing__social-link svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.landing__social-link svg rect,
+.landing__social-link svg circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.landing__social-link svg .landing__social-dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.landing__admin-link {
+  display: inline-block;
+  margin-top: 2.5rem;
+  color: rgba(90, 63, 112, 0.58);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.landing__admin-link:hover,
+.landing__admin-link:focus-visible {
+  color: #5a3f70;
+  text-decoration: underline;
+}
+
+/* --- Mobile Fixes --- */
+@media (max-width: 768px) {
+  .landing__intro,
+  .landing__benefits,
+  .landing__contact,
+  .landing__cta {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .landing__hero {
+    min-height: 80vh;
+    padding: 3rem 0;
+  }
+}

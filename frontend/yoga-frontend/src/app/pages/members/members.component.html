@@ -1,0 +1,91 @@
+<section class="members">
+  <div class="toolbar">
+    <h1 class="admin-title">Members</h1> 
+  </div>
+
+  <div class="toolbar-actions">
+    <button (click)="refresh()" [disabled]="loading()" class="btn-refresh">Refresh</button>
+  </div>
+
+  <div class="status-box" *ngIf="loading() || error()">
+    <div class="status" *ngIf="loading()">Updating records...</div>
+    <div class="status error" *ngIf="error()">{{ error() }}</div>
+  </div>
+
+  <form class="member-form" [formGroup]="form" (ngSubmit)="save()">
+    <h2 class="form-title">{{ editing() ? 'Edit member' : 'Add member' }}</h2>
+
+    <div class="form-grid">
+      <label>
+        <span>Name</span>
+        <input formControlName="name" placeholder="Full Name" />
+        <small class="field-error" *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">Name is required.</small>
+      </label>
+
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="email@example.com" />
+        <small class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">Enter a valid email address.</small>
+      </label>
+
+      <label>
+        <span>Phone</span>
+        <input formControlName="phone" placeholder="+41..." />
+        <small class="field-error" *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('pattern')">Enter a valid phone number.</small>
+        <small class="field-error" *ngIf="(form.get('email')?.touched || form.get('phone')?.touched) && form.hasError('contactRequired')">Email or phone is required.</small>
+      </label>
+
+      <label>
+        <span>Join date</span>
+        <input type="date" formControlName="join_date" />
+        <small class="field-error" *ngIf="form.get('join_date')?.touched && form.get('join_date')?.hasError('required')">Join date is required.</small>
+      </label>
+
+      <label class="notes-field">
+        <span>Notes</span>
+        <textarea formControlName="notes" rows="3" placeholder="Add notes about preferences, needs, or follow-up..."></textarea>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save">Save Member</button>
+      <button type="button" (click)="clearForm()" class="btn-cancel">Cancel</button>
+    </div>
+  </form>
+
+  <div class="table-container" *ngIf="members().length">
+    <table class="members-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Notes</th>
+          <th>Join Date</th>
+          <th></th> </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let member of members()">
+          <td><strong>{{ member.name }}</strong></td>
+          <td>
+            <div class="cell-data">{{ member.email }}</div>
+            <div class="cell-sub">{{ member.phone }}</div>
+          </td>
+          <td class="notes-cell">
+            <div *ngIf="member.notes; else noNotes">{{ member.notes }}</div>
+            <ng-template #noNotes><span class="cell-sub">No notes</span></ng-template>
+            <small *ngIf="member.notes_updated_at">Added {{ member.notes_updated_at | date: 'mediumDate' }}</small>
+          </td>
+          <td>{{ member.join_date | date: 'mediumDate' }}</td>
+          <td class="actions">
+            <button class="btn-edit" (click)="startEdit(member)">Edit</button>
+            <button class="btn-delete" (click)="delete(member)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="empty-state" *ngIf="!members().length && !loading()">
+    No members found. Use the form above to add one.
+  </p>
+</section>

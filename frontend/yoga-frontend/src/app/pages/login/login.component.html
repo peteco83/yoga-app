@@ -1,0 +1,23 @@
+<section class="login">
+  <h1>Admin login</h1>
+  <form (ngSubmit)="submit()" [formGroup]="form" class="login-form">
+    <label>
+      Username
+      <input formControlName="username" autocomplete="username" placeholder="Enter your username" />
+    </label>
+
+    <label>
+      Password
+      <div class="password-field">
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" autocomplete="current-password" placeholder="Enter your password" />
+        <button type="button" class="toggle-password" (click)="togglePassword()" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
+      </div>
+    </label>
+
+    <button type="submit" [disabled]="form.invalid">Log in</button>
+
+    <div class="error" *ngIf="error" role="alert">{{ error }}</div>
+  </form>
+</section>
