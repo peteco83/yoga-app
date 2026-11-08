@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -7,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -21,11 +20,14 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
-  error?: string;
-  showPassword = false;
+  // Signals, not plain fields: the app runs without zone.js, so a value written
+  // from the HTTP callback would not schedule a render (the message only showed
+  // up after the visitor happened to click somewhere else).
+  error = signal<string | undefined>(undefined);
+  showPassword = signal(false);
 
   togglePassword() {
-    this.showPassword = !this.showPassword;
+    this.showPassword.update((visible) => !visible);
   }
 
   submit() {
@@ -33,16 +35,17 @@ export class LoginComponent {
       return;
     }
 
-    this.error = undefined;
+    this.error.set(undefined);
 
     const { username, password } = this.form.value;
     this.auth.login(username!, password!).subscribe({
       next: () => this.router.navigate(['/admin']),
       error: (err) => {
-        this.error =
+        this.error.set(
           err?.status === 401
             ? 'Invalid username or password.'
-            : 'Unable to log in. Please try again.';
+            : 'Unable to log in. Please try again.',
+        );
       },
     });
   }

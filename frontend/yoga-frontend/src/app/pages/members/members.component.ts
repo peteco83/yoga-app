@@ -52,7 +52,7 @@ export class MembersComponent implements OnInit {
   );
 
   ngOnInit() {
-    if (!this.auth.isLoggedIn) {
+    if (!this.auth.isLoggedIn()) {
       this.router.navigate(['/login']);
       return;
     }

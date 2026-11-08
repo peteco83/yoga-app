@@ -169,16 +169,16 @@
         <button
           type="submit"
           class="button button--primary"
-          [disabled]="contactLoading || contactForm.invalid"
+          [disabled]="contactLoading() || contactForm.invalid"
         >
-          {{ (contactLoading ? 'LANDING.SENDING' : 'LANDING.SEND_MESSAGE') | translate }}
+          {{ (contactLoading() ? 'LANDING.SENDING' : 'LANDING.SEND_MESSAGE') | translate }}
         </button>
 
-        @if (contactSent) {
+        @if (contactSent()) {
           <div class="status" role="status">{{ 'LANDING.CONTACT_SUCCESS' | translate }}</div>
         }
-        @if (contactError) {
-          <div class="status error" role="alert">{{ contactError | translate }}</div>
+        @if (contactError()) {
+          <div class="status error" role="alert">{{ contactError() | translate }}</div>
         }
       </form>
     </div>

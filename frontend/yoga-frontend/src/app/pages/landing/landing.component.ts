@@ -5,6 +5,7 @@ import {
   ElementRef,
   afterNextRender,
   inject,
+  signal,
   viewChild,
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
@@ -228,9 +229,12 @@ export class LandingComponent {
     }
   }
 
-  contactSent = false;
-  contactError?: string;
-  contactLoading = false;
+  // Signals, not plain fields: the component is OnPush and the app runs
+  // without zone.js, so values written from the HTTP callback would only show
+  // up after the next unrelated click.
+  contactSent = signal(false);
+  contactError = signal('');
+  contactLoading = signal(false);
 
   contactForm = this.fb.group({
     name: ['', Validators.required],
@@ -268,8 +272,8 @@ export class LandingComponent {
       return;
     }
 
-    this.contactLoading = true;
-    this.contactError = undefined;
+    this.contactLoading.set(true);
+    this.contactError.set('');
 
     const value = this.contactForm.value;
     this.contactService
@@ -281,14 +285,14 @@ export class LandingComponent {
       .pipe(timeout(15000))
       .subscribe({
         next: () => {
-          this.contactSent = true;
-          this.contactLoading = false;
+          this.contactSent.set(true);
+          this.contactLoading.set(false);
           this.contactForm.reset();
         },
         error: (err) => {
           // If your backend sends a generic error, we can translate that too!
-          this.contactError = err?.error?.error || 'LANDING.CONTACT_ERROR';
-          this.contactLoading = false;
+          this.contactError.set(err?.error?.error || 'LANDING.CONTACT_ERROR');
+          this.contactLoading.set(false);
         },
       });
   }

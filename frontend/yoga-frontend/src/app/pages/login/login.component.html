@@ -10,7 +10,7 @@
       Password
       <div class="password-field">
         <input
-          [type]="showPassword ? 'text' : 'password'"
+          [type]="showPassword() ? 'text' : 'password'"
           formControlName="password"
           autocomplete="current-password"
           placeholder="Enter your password"
@@ -19,15 +19,17 @@
           type="button"
           class="toggle-password"
           (click)="togglePassword()"
-          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
         >
-          {{ showPassword ? '🙈' : '👁️' }}
+          {{ showPassword() ? '🙈' : '👁️' }}
         </button>
       </div>
     </label>
 
     <button type="submit" [disabled]="form.invalid">Log in</button>
 
-    <div class="error" *ngIf="error" role="alert">{{ error }}</div>
+    @if (error()) {
+      <div class="error" role="alert">{{ error() }}</div>
+    }
   </form>
 </section>
