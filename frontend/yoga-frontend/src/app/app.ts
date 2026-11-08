@@ -1,10 +1,11 @@
 import { Component, DestroyRef, OnInit, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services/auth.service';
+import { prefersReducedMotion } from './shared/motion';
 import { fromEvent } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { filter, map, startWith, take } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -41,6 +42,37 @@ export class App implements OnInit {
         )
         .subscribe((isScrolled) => this.scrolled.set(isScrolled));
     }
+  }
+
+  /**
+   * The brand always links to "/" and the landing page is the only entry point,
+   * so a click on it should leave the visitor at the very top of the page.
+   * From another route the routerLink navigation runs first, hence the wait for
+   * NavigationEnd: the landing page rebuilds its ScrollTrigger pins while it
+   * renders and its height is only final afterwards.
+   */
+  scrollToTop() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // `scroll-behavior: smooth` is global, so ask for `instant` when the
+    // visitor prefers reduced motion instead of jumping through the whole page.
+    const toTop = () =>
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'instant' : 'smooth' });
+
+    if (this.router.url === '/') {
+      toTop();
+      return;
+    }
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => toTop());
   }
 
   switchLanguage(lang: string) {

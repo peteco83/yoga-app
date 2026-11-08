@@ -1,13 +1,13 @@
 <div class="app">
   <header class="app__header" [class.scrolled]="scrolled() || auth.isLoggedIn()">
-    <a routerLink="/" class="app__brand">Momkari Yoga</a>
+    <a routerLink="/" class="app__brand" (click)="scrollToTop()">Momkari Yoga</a>
 
     <nav class="app__nav">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        {{ 'NAV.HOME' | translate }}
-      </a>
-
       @if (auth.isLoggedIn()) {
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          {{ 'NAV.HOME' | translate }}
+        </a>
+
         <a routerLink="/admin" routerLinkActive="active">
           {{ 'NAV.MEMBERS' | translate }}
         </a>
