@@ -110,6 +110,19 @@ cd yoga-app
 
 Later updates are just `./scripts/redeploy.sh`.
 
+Your SSH user is usually **not** in the `docker` group on UGOS, so any
+`docker`/`docker compose` command answers
+`permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`.
+Either prefix the commands with `sudo`, or fix it once:
+
+```bash
+sudo usermod -aG docker "$USER"   # then close the session and reconnect
+docker ps                         # should list containers without sudo
+```
+
+The same applies to the cron entry from step 9 (cron jobs run without your
+login groups, so use `sudo` there too if you did not join the group).
+
 ### 3b. From the Mac, through the mounted share (no SSH)
 
 If the NAS share is mounted (Finder → Connect to Server → `smb://<nas-ip>/docker`)
@@ -238,9 +251,23 @@ with the internet.
 # another account: ./scripts/set-admin-password.sh <username>
 ```
 
+You choose the password there — nothing is hardcoded. It is read twice with
+hidden input, must be at least 12 characters, and any character is fine
+(`&`, `!`, `$`, spaces, accents…) up to **72 bytes**, the bcrypt limit. To
+generate one:
+
+```bash
+openssl rand -base64 24
+```
+
 The script hashes with PostgreSQL's `pgcrypto`, which produces the same bcrypt
 format the Go API verifies. Then log in at `https://<your-domain.com>/login` to
 confirm.
+
+Two things it does **not** do: it does not kill open sessions (a token lives 24 h;
+to log everybody out, rotate `JWT_SECRET` in `.env` and `up -d backend`), and it
+does not create accounts (add one with `INSERT INTO admins (username,
+password_hash) VALUES ('other', crypt('<password>', gen_salt('bf', 10)))`).
 
 
 ---
@@ -381,6 +408,7 @@ want to include the database in the check.
 | Backend restart loop with `JWT_SECRET must be configured` | `.env` missing or not loaded | Run compose from the folder that holds `.env` |
 | Container exits with `exec format error` | The image was built on a Mac (`arm64`) instead of the NAS (`amd64`) | Rebuild on the NAS, or `docker build --platform linux/amd64` (Appendix A) |
 | `cp: .env` overwrote the password and the API cannot log in | The Mac copy was synced over the NAS `.env` | Restore `.env` from the backup, or `ALTER USER` (row above); the rsync in 3b excludes `/.env` for this reason |
+| `permission denied while trying to connect to the docker API at unix:///var/run/docker.sock` | Your SSH/cron user is not in the `docker` group | `sudo <command>`, or `sudo usermod -aG docker "$USER"` and log in again (step 3a) |
 | Contact form works but you get no email | By design: messages are stored only | Read them on the **Messages** page (`/admin/messages`) |
 
 Useful one-liners:

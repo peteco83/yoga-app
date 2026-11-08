@@ -23,6 +23,19 @@ env_get() {
 POSTGRES_USER=$(env_get POSTGRES_USER)
 POSTGRES_DB=$(env_get POSTGRES_DB)
 
+# Cron and SSH sessions on the NAS often lack docker.sock permissions: say so.
+if ! docker info >/dev/null 2>&1; then
+  echo "cannot talk to the Docker daemon (permission denied on /var/run/docker.sock?)" >&2
+  echo "  run it with sudo, or add the user to the docker group (sudo usermod -aG docker \"\$USER\")" >&2
+  exit 1
+fi
+
+if [ -z "$(docker compose -f "$COMPOSE_FILE" ps -q postgres 2>/dev/null)" ]; then
+  echo "the postgres container is not running - start the stack first:" >&2
+  echo "  docker compose -f $COMPOSE_FILE up -d" >&2
+  exit 1
+fi
+
 mkdir -p backups
 file="backups/${POSTGRES_DB:-yoga_app}-$(date +%Y%m%d-%H%M%S).sql.gz"
 

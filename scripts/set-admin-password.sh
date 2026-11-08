@@ -27,6 +27,23 @@ env_get() {
 POSTGRES_USER=$(env_get POSTGRES_USER)
 POSTGRES_DB=$(env_get POSTGRES_DB)
 
+# Fail before asking for the password, with a fix, instead of half way through.
+if ! docker info >/dev/null 2>&1; then
+  cat >&2 <<EOF
+cannot talk to the Docker daemon (permission denied on /var/run/docker.sock?)
+
+  run it with sudo:      sudo $0 $USERNAME
+  or join the group:     sudo usermod -aG docker "\$USER"   (then log in again)
+EOF
+  exit 1
+fi
+
+if [ -z "$(docker compose -f "$COMPOSE_FILE" ps -q postgres 2>/dev/null)" ]; then
+  echo "the postgres container is not running - start the stack first:" >&2
+  echo "  docker compose -f $COMPOSE_FILE up -d" >&2
+  exit 1
+fi
+
 read -r -s -p "New password for '$USERNAME': " PASSWORD
 echo
 read -r -s -p "Repeat password: " PASSWORD2
