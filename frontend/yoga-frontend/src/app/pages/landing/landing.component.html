@@ -242,6 +242,8 @@
         <span>{{ 'LANDING.SOCIAL_INSTAGRAM_KIDS' | translate }}</span>
       </a>
     </nav>
-    <a class="landing__admin-link" routerLink="/login">{{ 'NAV.ADMIN' | translate }}</a>
+    @if (!auth.isLoggedIn()) {
+      <a class="landing__admin-link" routerLink="/login">{{ 'NAV.ADMIN' | translate }}</a>
+    }
   </footer>
 </section>

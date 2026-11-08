@@ -12,6 +12,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContactService } from '../../services/contact.service';
+import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { timeout } from 'rxjs';
 import { HeroSceneComponent } from './hero-scene.component';
@@ -43,6 +44,8 @@ export class LandingComponent {
   private fb = inject(FormBuilder);
   private contactService = inject(ContactService);
   private destroyRef = inject(DestroyRef);
+  /** Drives the footer link: a logged-in admin does not need it. */
+  protected readonly auth = inject(AuthService);
 
   private readonly pageRef = viewChild<ElementRef<HTMLElement>>('page');
   private readonly heroRef = viewChild<ElementRef<HTMLElement>>('hero');
