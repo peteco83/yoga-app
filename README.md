@@ -49,7 +49,7 @@ the NAS). To push the current working tree there:
 
 ```bash
 rsync -a --delete \
-  --exclude '/.env' --exclude '/.git/' --exclude '/backups/' --exclude '.DS_Store' \
+  --exclude '/.env' --exclude '/.env.bak-*' --exclude '/.git/' --exclude '/backups/' --exclude '.DS_Store' \
   --exclude '/backend/backend' --exclude '/backend/api' \
   --exclude '/frontend/yoga-frontend/node_modules/' \
   --exclude '/frontend/yoga-frontend/dist/' --exclude '/frontend/yoga-frontend/.angular/' \
@@ -66,6 +66,7 @@ Helper scripts:
 | `scripts/redeploy.sh` | pull, rebuild and restart the stack |
 | `scripts/backup-db.sh` | nightly `pg_dump` with retention |
 | `scripts/set-admin-password.sh` | replace the seeded admin password |
+| `scripts/rotate-secrets.sh` | new `JWT_SECRET` and/or `POSTGRES_PASSWORD`, verified |
 
 ## Checks
 

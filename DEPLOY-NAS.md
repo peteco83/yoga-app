@@ -295,8 +295,8 @@ format the Go API verifies. Then log in at `https://<your-domain.com>/login` to
 confirm.
 
 Two things it does **not** do: it does not kill open sessions (a token lives 24 h;
-to log everybody out, rotate `JWT_SECRET` in `.env` and `up -d backend`), and it
-does not create accounts (add one with `INSERT INTO admins (username,
+`./scripts/rotate-secrets.sh jwt` does that, see §9), and it does not create
+accounts (add one with `INSERT INTO admins (username,
 password_hash) VALUES ('other', crypt('<password>', gen_salt('bf', 10)))`).
 
 
@@ -390,6 +390,32 @@ gunzip -c backups/yoga_app-20261108-033000.sql.gz \
       psql -U yoga_admin -d yoga_app
 ```
 
+**Rotate the secrets** (leak, lost laptop, or once a year)
+
+```bash
+./scripts/rotate-secrets.sh             # asks: both / JWT only / database only
+./scripts/rotate-secrets.sh both --yes  # unattended
+```
+
+It generates new values with `openssl`, backs `.env` up to `.env.bak-<timestamp>`,
+rewrites only the affected lines (a stale `#JWT_SECRET=` comment is removed, the
+rest of the file — including the tunnel token — is kept byte for byte), runs
+`ALTER USER` for the database password, recreates **only** the API container, and
+then requires `/api/health` to answer `200` within 30 s. If it does not, `.env`
+and the database password are put back and the old API is started again: a failed
+rotation leaves the site exactly as it was.
+
+| Secret | New value | What the visitor notices |
+| --- | --- | --- |
+| `JWT_SECRET` | 64 base64 characters | every admin token is void, you log in again at `/login` |
+| `POSTGRES_PASSWORD` | 48 hex characters | nothing: `DATABASE_URL` is composed from it, and the admin login lives in the database |
+
+The database password is generated as hex on purpose — `/`, `#` and `%` break the
+connection URL, `$` is expanded by Compose and `&` broke `source .env` in the
+scripts. Read it later with `grep '^POSTGRES_PASSWORD=' .env`. The last
+`KEEP_BACKUPS` backups (3) are kept; `KEEP_BACKUPS=10 ./scripts/rotate-secrets.sh`
+keeps more.
+
 **Disk**
 
 ```bash
@@ -432,7 +458,7 @@ want to include the database in the check.
 | Error `526` | SSL/TLS mode is *Full (strict)* but the origin is HTTP | Set **Full** |
 | `ERR_TOO_MANY_REDIRECTS` | Mode *Flexible* combined with *Always Use HTTPS* | Set **Full** |
 | Login always answers *Invalid credentials* | The seeded hash was replaced by hand | `./scripts/set-admin-password.sh` |
-| `password authentication failed for user` in the API logs | `POSTGRES_PASSWORD` was changed after the volume was created — Postgres only reads it on first init | Recreate the volume (`... down -v`, loses data) or run `ALTER USER yoga_admin WITH PASSWORD '...'` in `docker exec -it yoga_app_db psql -U yoga_admin -d yoga_app` |
+| `password authentication failed for user` in the API logs | `POSTGRES_PASSWORD` was changed after the volume was created — Postgres only reads it on first init | `./scripts/rotate-secrets.sh db` runs the `ALTER USER` for you; recreating the volume (`... down -v`) also works but loses the data |
 | Old page after a deploy | Browser or Cloudflare cache | Purge Cloudflare cache; hard reload (`index.html` is `no-cache`) |
 | `relation "admins" does not exist` | `init.sql` only runs on an empty volume | `docker compose ... down` then remove the `db_data` volume, or apply `database/init.sql` by hand |
 | Backend restart loop with `JWT_SECRET must be configured` | `.env` missing or not loaded | Run compose from the folder that holds `.env` |
