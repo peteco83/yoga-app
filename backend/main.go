@@ -5,7 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"regexp"
@@ -74,13 +76,13 @@ var contactEmailPattern = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]{2,}$`)
 var db *sql.DB
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-func init() {
+func main() {
+	// Checked here instead of init() so that tests can build the router without
+	// the production environment.
 	if len(jwtSecret) == 0 {
 		log.Fatal("JWT_SECRET must be configured")
 	}
-}
 
-func main() {
 	var err error
 	connStr := os.Getenv("DATABASE_URL")
 	if connStr == "" {
@@ -121,6 +123,10 @@ func main() {
 	if err := r.SetTrustedProxies([]string{"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}); err != nil {
 		log.Printf("could not configure trusted proxies: %v", err)
 	}
+
+	// Must run before the CORS middleware: it hides the Origin of requests that
+	// are not cross-origin at all, so gin-contrib/cors never sees them.
+	r.Use(ignoreSameOriginHeader)
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     allowedOrigins(),
@@ -174,8 +180,9 @@ func main() {
 }
 
 // allowedOrigins reads extra browser origins from ALLOWED_ORIGINS (comma
-// separated). The public site calls /api on its own origin, so it needs no
-// entry; the defaults only cover local development.
+// separated). Only genuinely cross-origin clients need an entry: the site is
+// served by nginx from the same origin as /api, and ignoreSameOriginHeader
+// already takes care of those requests. The defaults cover local development.
 func allowedOrigins() []string {
 	origins := []string{}
 	for _, origin := range strings.Split(os.Getenv("ALLOWED_ORIGINS"), ",") {
@@ -192,6 +199,52 @@ func allowedOrigins() []string {
 		}
 	}
 	return origins
+}
+
+// ignoreSameOriginHeader drops the Origin header of requests that are not
+// cross-origin, so the CORS middleware below never rejects them.
+//
+// Browsers attach Origin to every request that is not a simple GET, including
+// same-origin ones. gin-contrib/cors answers 403 for any origin missing from
+// the allow list, which would break the site served by nginx (same origin as
+// /api by definition) unless the deployment listed its own domain in
+// ALLOWED_ORIGINS. Such a request is not a CORS request at all, so hiding the
+// header is the accurate signal; ALLOWED_ORIGINS keeps working for clients that
+// really are on another origin.
+func ignoreSameOriginHeader(c *gin.Context) {
+	origin := c.GetHeader("Origin")
+	if origin == "" {
+		c.Next()
+		return
+	}
+	if host := originHostname(origin); host != "" && host == requestHostname(c.Request) {
+		c.Request.Header.Del("Origin")
+	}
+	c.Next()
+}
+
+// originHostname returns the host of an Origin header ("https://example.com:
+// 8443" -> "example.com") or "" when it is not a usable origin. Only the host
+// is compared because nginx forwards the host it serves without the port, while
+// the browser puts the port in the origin.
+func originHostname(origin string) string {
+	parsed, err := url.Parse(origin)
+	if err != nil || parsed.Host == "" {
+		return ""
+	}
+	return strings.ToLower(parsed.Hostname())
+}
+
+// requestHostname is the host the browser used to reach us, without the port.
+func requestHostname(r *http.Request) string {
+	host := r.Host
+	if host == "" {
+		host = r.URL.Host
+	}
+	if withoutPort, _, err := net.SplitHostPort(host); err == nil {
+		host = withoutPort
+	}
+	return strings.ToLower(strings.Trim(host, "[]"))
 }
 
 // health is polled by Docker Compose and can be used as an uptime check.

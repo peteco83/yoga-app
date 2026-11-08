@@ -31,6 +31,10 @@ npm start
 The admin area lives at `/login` (`admin` / `admin123` on a fresh database —
 development only), members at `/admin` and contact messages at `/admin/messages`.
 
+```bash
+cd backend && go test ./...     # middleware, CORS and helper functions
+```
+
 ## Production
 
 Everything runs on the NAS and is exposed only through a Cloudflare Tunnel:

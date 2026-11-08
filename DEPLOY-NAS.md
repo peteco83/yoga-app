@@ -458,6 +458,7 @@ want to include the database in the check.
 | Error `526` | SSL/TLS mode is *Full (strict)* but the origin is HTTP | Set **Full** |
 | `ERR_TOO_MANY_REDIRECTS` | Mode *Flexible* combined with *Always Use HTTPS* | Set **Full** |
 | Login always answers *Invalid credentials* | The seeded hash was replaced by hand | `./scripts/set-admin-password.sh` |
+| Login shows *Unable to log in. Please try again.* and DevTools show `403 Forbidden` (empty body) on `POST /api/login` | Browsers send `Origin` even to the API of the same origin, and the CORS middleware refuses any origin it does not know. Images built before the `ignoreSameOriginHeader` fix (`backend/main.go`) reject every browser login; `curl` works because it sends no `Origin` | Rebuild the API (`docker compose ... up -d --build backend`), or add the origin: `ALLOWED_ORIGINS=http://<nas-ip>:5007` in `.env` + `up -d --no-deps backend` |
 | `password authentication failed for user` in the API logs | `POSTGRES_PASSWORD` was changed after the volume was created — Postgres only reads it on first init | `./scripts/rotate-secrets.sh db` runs the `ALTER USER` for you; recreating the volume (`... down -v`) also works but loses the data |
 | Old page after a deploy | Browser or Cloudflare cache | Purge Cloudflare cache; hard reload (`index.html` is `no-cache`) |
 | `relation "admins" does not exist` | `init.sql` only runs on an empty volume | `docker compose ... down` then remove the `db_data` volume, or apply `database/init.sql` by hand |
