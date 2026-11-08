@@ -223,6 +223,36 @@ All four services must be `running`, and `yoga-api` / `yoga-ui` `healthy`.
 `docker compose -f docker-compose.production.yml logs -f cloudflared` should end
 with `Registered tunnel connection`.
 
+**Which ports are open, and from where**
+
+| Port | Service | Reachable from |
+| --- | --- | --- |
+| `5007` (`LAN_PORT`) | nginx — the whole site | **only the NAS itself**, because `LAN_BIND=127.0.0.1`: `curl http://127.0.0.1:5007/` on the NAS |
+| `80` | nginx, inside its container | the other containers, i.e. `cloudflared` |
+| `8080` | Go API | `web-net` only — never published |
+| `5432` | PostgreSQL | `db-net` (internal) only — never published |
+| `7844` | Cloudflare Tunnel | **outbound only**: `cloudflared` dials out, nothing listens |
+
+So the public site uses **no port at all**, and no router port forwarding is
+needed. `5007` is a convenience for the NAS itself; to open it from another
+machine either forward it over SSH —
+
+```bash
+ssh -L 5007:127.0.0.1:5007 <user>@<nas-ip>    # then http://localhost:5007 on your Mac
+```
+
+— or set `LAN_BIND=0.0.0.0` and `docker compose ... up -d frontend` (then
+`http://<nas-ip>:5007` works from any device on the LAN, including the admin
+login, which is why it is off by default).
+
+To change the port, set `LAN_PORT=8080` in `.env` and recreate that one service
+(`up -d frontend`); it has no effect on the public URL. To see the effective
+mapping:
+
+```bash
+docker compose -f docker-compose.production.yml port frontend 80
+```
+
 ---
 
 ## 5. Verify
