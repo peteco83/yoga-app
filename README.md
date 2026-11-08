@@ -56,5 +56,5 @@ Helper scripts:
 ```bash
 cd frontend/yoga-frontend && npx prettier --check "src/**/*.{ts,html,css}" && npx ng build
 cd backend && go vet ./... && go build ./...
-docker compose -f docker-compose.production.yml config --quiet
+cp .env.example .env && docker compose -f docker-compose.production.yml config --quiet
 ```
