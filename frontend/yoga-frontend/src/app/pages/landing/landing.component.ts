@@ -251,15 +251,15 @@ export class LandingComponent {
   styles: YogaStyle[] = [
     {
       key: 'FAMILY_YOGA',
-      image: '/assets/images/family-yoga.png',
+      image: '/assets/images/family-yoga.webp',
     },
     {
       key: 'KIDS_STORY',
-      image: '/assets/images/kids-yoga.png',
+      image: '/assets/images/kids-yoga.webp',
     },
     {
       key: 'KIDS_MEDITATION',
-      image: '/assets/images/hero-kids-meditation.png',
+      image: '/assets/images/hero-kids-meditation.webp',
     },
     {
       key: 'SOUND_BATH',

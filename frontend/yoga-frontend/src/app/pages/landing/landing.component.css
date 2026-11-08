@@ -55,7 +55,7 @@
   /* Static base layer: shows through if the WebGL scene is unavailable. */
   background:
     linear-gradient(180deg, rgba(250, 245, 237, 0.45), rgba(241, 246, 250, 0.45)),
-    url('/assets/images/hero-kids-meditation.png') center/cover no-repeat;
+    url('/assets/images/hero-kids-meditation.webp') center/cover no-repeat;
   overflow: hidden;
 }
 

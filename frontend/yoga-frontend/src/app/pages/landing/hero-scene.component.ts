@@ -13,10 +13,10 @@ import type * as Three from 'three';
 import { loadMotion } from '../../shared/motion';
 import { bowlStartsMuted, loadBowlSound, type BowlVoice } from '../../shared/singing-bowl';
 
-const HERO_IMAGE = '/assets/images/hero-kids-meditation.png';
+const HERO_IMAGE = '/assets/images/hero-kids-meditation.webp';
 
 /**
- * Singing bowl measured on hero-kids-meditation.png (uv, bottom-left origin;
+ * Singing bowl measured on hero-kids-meditation.webp (uv, bottom-left origin;
  * the artwork is 1536 x 1024). Pointing at it warms the bronze up; pressing it
  * strikes a note.
  */
@@ -81,7 +81,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   // Point of the cycle where the mallet lands on the bowl.
   const float IMPACT = 0.8;
 
-  // Light sources measured on hero-kids-meditation.png (uv, bottom-left origin).
+  // Light sources measured on hero-kids-meditation.webp (uv, bottom-left origin).
   const vec2 CANDLE_A = vec2(0.267, 0.435);
   const vec2 CANDLE_B = vec2(0.301, 0.414);
   const vec2 LAMP_A = vec2(0.489, 0.684);
@@ -441,7 +441,7 @@ export class HeroSceneComponent {
       uResolution: { value: new THREE.Vector2(1, 1) },
       uImageResolution: { value: new THREE.Vector2(1, 1) },
       uPointer: { value: new THREE.Vector2(0, 0) },
-      // Singing bowl measured on hero-kids-meditation.png (uv, bottom-left origin).
+      // Singing bowl measured on hero-kids-meditation.webp (uv, bottom-left origin).
       uBowlCenter: { value: new THREE.Vector2(BOWL_UV.x, BOWL_UV.y) },
       uBowlRadius: { value: 0.095 },
       uTime: { value: 0 },
