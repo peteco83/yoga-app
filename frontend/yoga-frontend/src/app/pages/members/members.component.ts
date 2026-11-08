@@ -1,7 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Member, MemberService } from '../../services/member.service';
 import { AuthService } from '../../services/auth.service';
 import { ContactMessage, ContactService } from '../../services/contact.service';
@@ -34,13 +40,16 @@ export class MembersComponent implements OnInit {
     return email || phone ? null : { contactRequired: true };
   }
 
-  form = this.fb.group({
-    name: ['', Validators.required],
-    email: ['', Validators.email],
-    phone: ['', Validators.pattern(/^[\d\s\-\+\(\)]*$/)],
-    notes: [''],
-    join_date: ['', Validators.required],
-  }, { validators: (control) => this.contactValidator(control) });
+  form = this.fb.group(
+    {
+      name: ['', Validators.required],
+      email: ['', Validators.email],
+      phone: ['', Validators.pattern(/^[\d\s\-\+\(\)]*$/)],
+      notes: [''],
+      join_date: ['', Validators.required],
+    },
+    { validators: (control) => this.contactValidator(control) },
+  );
 
   ngOnInit() {
     if (!this.auth.isLoggedIn) {
@@ -93,9 +102,9 @@ export class MembersComponent implements OnInit {
       join_date: this.form.value.join_date ?? '',
     };
 
-    const request = this.editing() ?
-      this.service.update(this.editing()!.id, payload) :
-      this.service.create(payload);
+    const request = this.editing()
+      ? this.service.update(this.editing()!.id, payload)
+      : this.service.create(payload);
 
     request.subscribe({
       next: () => {
@@ -118,7 +127,9 @@ export class MembersComponent implements OnInit {
 
   mailtoLink(email: string, name: string, message: string): string {
     const subject = encodeURIComponent(`Re: your Yoga Studio inquiry`);
-    const body = encodeURIComponent(`Hi ${name},\n\nThanks for reaching out!\n\nYour message:\n${message}\n\n[Add your reply here]\n\nBest regards,\nYoga Studio Team`);
+    const body = encodeURIComponent(
+      `Hi ${name},\n\nThanks for reaching out!\n\nYour message:\n${message}\n\n[Add your reply here]\n\nBest regards,\nYoga Studio Team`,
+    );
     return `mailto:${email}?subject=${subject}&body=${body}`;
   }
 

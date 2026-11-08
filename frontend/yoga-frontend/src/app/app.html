@@ -1,12 +1,12 @@
 <div class="app">
   <header class="app__header" [class.scrolled]="scrolled() || auth.isLoggedIn()">
     <a routerLink="/" class="app__brand">Momkari Yoga</a>
-    
+
     <nav class="app__nav">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         {{ 'NAV.HOME' | translate }}
       </a>
-      
+
       @if (auth.isLoggedIn()) {
         <a routerLink="/admin" routerLinkActive="active">
           {{ 'NAV.MEMBERS' | translate }}
@@ -23,9 +23,7 @@
       </div>
 
       @if (auth.isLoggedIn()) {
-        <button (click)="logout()" class="nav-logout">
-          Logout
-        </button>
+        <button (click)="logout()" class="nav-logout">Logout</button>
       }
     </nav>
   </header>

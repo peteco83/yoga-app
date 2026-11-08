@@ -19,12 +19,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: 'Playfair Display', serif;
   font-weight: 400;
 }
 
-#root-container, app-root {
+#root-container,
+app-root {
   display: block;
   padding-top: 80px; /* Adjust this to the exact height of your nav */
 }

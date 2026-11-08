@@ -34,7 +34,7 @@ body {
   align-items: center;
   padding: 1.5rem 5%; /* Adjust spacing to match your design */
   background: rgba(255, 255, 255, 0.75);
-  border: none !important;  /* Removes the grey line */
+  border: none !important; /* Removes the grey line */
   box-shadow: 0 24px 80px rgba(124, 86, 156, 0.08) !important;
   backdrop-filter: blur(12px);
   transition: all 0.3s ease;
@@ -45,7 +45,7 @@ body {
   position: fixed;
   background: rgba(255, 255, 255, 0.95);
   padding: 1rem 5%;
-  box-shadow: 0 2px 20px rgba(124,86,156,0.08) !important;
+  box-shadow: 0 2px 20px rgba(124, 86, 156, 0.08) !important;
 }
 
 /* --- Brand/Logo --- */
@@ -90,7 +90,7 @@ body {
   gap: 1rem;
   margin-left: 1rem;
   padding-left: 1rem;
-  border-left: 1px solid rgba(0,0,0,0.1); /* Very light separator */
+  border-left: 1px solid rgba(0, 0, 0, 0.1); /* Very light separator */
 }
 
 .app__lang-picker button {
@@ -130,7 +130,7 @@ body {
   flex: 1;
   /* This is the magic fix for the overlapping content: */
   /* It ensures that sub-pages like /admin or /login start below the nav */
-  margin-top: 0; 
+  margin-top: 0;
 }
 
 /* Use a helper class or apply logic to non-home pages */

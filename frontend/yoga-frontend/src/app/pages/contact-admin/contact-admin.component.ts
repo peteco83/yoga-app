@@ -81,7 +81,9 @@ export class ContactAdminComponent implements OnInit {
 
   mailtoLink(email: string, name: string, message: string): string {
     const subject = encodeURIComponent(`Re: your Yoga Studio inquiry`);
-    const body = encodeURIComponent(`Hi ${name},\n\nThanks for reaching out!\n\nYour message:\n${message}\n\n[Add your reply here]\n\nBest regards,\nYoga Studio Team`);
+    const body = encodeURIComponent(
+      `Hi ${name},\n\nThanks for reaching out!\n\nYour message:\n${message}\n\n[Add your reply here]\n\nBest regards,\nYoga Studio Team`,
+    );
     return `mailto:${email}?subject=${subject}&body=${body}`;
   }
 }

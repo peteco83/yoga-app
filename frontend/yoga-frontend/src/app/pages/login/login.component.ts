@@ -39,9 +39,10 @@ export class LoginComponent {
     this.auth.login(username!, password!).subscribe({
       next: () => this.router.navigate(['/admin']),
       error: (err) => {
-        this.error = err?.status === 401
-          ? 'Invalid username or password.'
-          : 'Unable to log in. Please try again.';
+        this.error =
+          err?.status === 401
+            ? 'Invalid username or password.'
+            : 'Unable to log in. Please try again.';
       },
     });
   }

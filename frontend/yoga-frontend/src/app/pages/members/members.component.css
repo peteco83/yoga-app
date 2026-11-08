@@ -35,7 +35,7 @@
   gap: 1rem;
   margin-bottom: 2rem;
   /* Ensure this sits below the nav */
-  position: relative; 
+  position: relative;
   z-index: 1;
 }
 

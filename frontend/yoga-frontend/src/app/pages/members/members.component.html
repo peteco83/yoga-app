@@ -1,6 +1,6 @@
 <section class="members">
   <div class="toolbar">
-    <h1 class="admin-title">Members</h1> 
+    <h1 class="admin-title">Members</h1>
   </div>
 
   <div class="toolbar-actions">
@@ -19,31 +19,58 @@
       <label>
         <span>Name</span>
         <input formControlName="name" placeholder="Full Name" />
-        <small class="field-error" *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">Name is required.</small>
+        <small
+          class="field-error"
+          *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')"
+          >Name is required.</small
+        >
       </label>
 
       <label>
         <span>Email</span>
         <input type="email" formControlName="email" placeholder="email@example.com" />
-        <small class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">Enter a valid email address.</small>
+        <small
+          class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')"
+          >Enter a valid email address.</small
+        >
       </label>
 
       <label>
         <span>Phone</span>
         <input formControlName="phone" placeholder="+41..." />
-        <small class="field-error" *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('pattern')">Enter a valid phone number.</small>
-        <small class="field-error" *ngIf="(form.get('email')?.touched || form.get('phone')?.touched) && form.hasError('contactRequired')">Email or phone is required.</small>
+        <small
+          class="field-error"
+          *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('pattern')"
+          >Enter a valid phone number.</small
+        >
+        <small
+          class="field-error"
+          *ngIf="
+            (form.get('email')?.touched || form.get('phone')?.touched) &&
+            form.hasError('contactRequired')
+          "
+          >Email or phone is required.</small
+        >
       </label>
 
       <label>
         <span>Join date</span>
         <input type="date" formControlName="join_date" />
-        <small class="field-error" *ngIf="form.get('join_date')?.touched && form.get('join_date')?.hasError('required')">Join date is required.</small>
+        <small
+          class="field-error"
+          *ngIf="form.get('join_date')?.touched && form.get('join_date')?.hasError('required')"
+          >Join date is required.</small
+        >
       </label>
 
       <label class="notes-field">
         <span>Notes</span>
-        <textarea formControlName="notes" rows="3" placeholder="Add notes about preferences, needs, or follow-up..."></textarea>
+        <textarea
+          formControlName="notes"
+          rows="3"
+          placeholder="Add notes about preferences, needs, or follow-up..."
+        ></textarea>
       </label>
     </div>
 
@@ -61,11 +88,14 @@
           <th>Contact</th>
           <th>Notes</th>
           <th>Join Date</th>
-          <th></th> </tr>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
         <tr *ngFor="let member of members()">
-          <td><strong>{{ member.name }}</strong></td>
+          <td>
+            <strong>{{ member.name }}</strong>
+          </td>
           <td>
             <div class="cell-data">{{ member.email }}</div>
             <div class="cell-sub">{{ member.phone }}</div>
@@ -73,7 +103,9 @@
           <td class="notes-cell">
             <div *ngIf="member.notes; else noNotes">{{ member.notes }}</div>
             <ng-template #noNotes><span class="cell-sub">No notes</span></ng-template>
-            <small *ngIf="member.notes_updated_at">Added {{ member.notes_updated_at | date: 'mediumDate' }}</small>
+            <small *ngIf="member.notes_updated_at"
+              >Added {{ member.notes_updated_at | date: 'mediumDate' }}</small
+            >
           </td>
           <td>{{ member.join_date | date: 'mediumDate' }}</td>
           <td class="actions">

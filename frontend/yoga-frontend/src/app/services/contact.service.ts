@@ -46,10 +46,16 @@ export class ContactService {
   }
 
   markUnread(id: number) {
-    return this.http.put(`${this.baseUrl}-messages/${id}/unread`, null, { headers: this.headers() });
+    return this.http.put(`${this.baseUrl}-messages/${id}/unread`, null, {
+      headers: this.headers(),
+    });
   }
 
   assign(id: number, assignee: string) {
-    return this.http.patch(`${this.baseUrl}-messages/${id}/assign`, { assignee }, { headers: this.headers() });
+    return this.http.patch(
+      `${this.baseUrl}-messages/${id}/assign`,
+      { assignee },
+      { headers: this.headers() },
+    );
   }
 }

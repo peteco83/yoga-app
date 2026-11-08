@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslateModule],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
 })
 export class App implements OnInit {
   private router = inject(Router);
@@ -29,15 +29,17 @@ export class App implements OnInit {
       const savedLang = localStorage.getItem('userLang');
       const browserLang = this.translate.getBrowserLang();
       const finalLang = savedLang || (browserLang?.match(/en|es|de/) ? browserLang : 'en');
-      
+
       // 2. Load the language file (only happens in browser)
       this.switchLanguage(finalLang);
 
-      fromEvent(window, 'scroll').pipe(
-        startWith(null),
-        map(() => window.scrollY > 50),
-        takeUntilDestroyed(this.destroyRef),
-      ).subscribe((isScrolled) => this.scrolled.set(isScrolled));
+      fromEvent(window, 'scroll')
+        .pipe(
+          startWith(null),
+          map(() => window.scrollY > 50),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe((isScrolled) => this.scrolled.set(isScrolled));
     }
   }
 

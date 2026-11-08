@@ -28,22 +28,20 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    return this.http
-      .post<LoginResponse>('/api/login', { username, password })
-      .pipe(
-        tap((res) => {
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem(this.storageKey, res.token);
-            this.currentUserToken.set(res.token); 
-          }
-        })
-      );
+    return this.http.post<LoginResponse>('/api/login', { username, password }).pipe(
+      tap((res) => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem(this.storageKey, res.token);
+          this.currentUserToken.set(res.token);
+        }
+      }),
+    );
   }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem(this.storageKey);
     }
-    this.currentUserToken.set(null); 
+    this.currentUserToken.set(null);
   }
 }

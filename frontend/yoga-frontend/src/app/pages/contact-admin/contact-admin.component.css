@@ -80,8 +80,14 @@
   border-radius: 2px;
 }
 
-.status-badge.read { background: #eef2f0; color: #8da399; }
-.status-badge.unread { background: #fdf2f2; color: #c81e1e; }
+.status-badge.read {
+  background: #eef2f0;
+  color: #8da399;
+}
+.status-badge.unread {
+  background: #fdf2f2;
+  color: #c81e1e;
+}
 
 /* --- Action Buttons --- */
 .btn-action {
@@ -97,8 +103,12 @@
   transition: color 0.3s;
 }
 
-.btn-action:hover { color: #000; }
-.btn-action.danger { color: #c81e1e; }
+.btn-action:hover {
+  color: #000;
+}
+.btn-action.danger {
+  color: #c81e1e;
+}
 
 .reply-link {
   color: #8da399;

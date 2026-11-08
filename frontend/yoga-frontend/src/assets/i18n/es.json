@@ -22,17 +22,34 @@
     "HERO_TITLE": "Momkari Yoga Studio",
     "HERO_SUBTITLE": "Yoga infantil y meditación en Münchenbuchsee",
     "HERO_DESC": "Movimiento lúdico, respiración consciente y momentos de calma para ayudar a los niños a sentirse seguros, conectados y tranquilos.",
+    "SCROLL_HINT": "Respira con la luz",
+    "BOWL_HINT": "Toca el cuenco",
+    "SOUND_ON": "Activar el sonido del cuenco",
+    "SOUND_OFF": "Silenciar el cuenco",
     "INTRO_TITLE": "Un espacio de calma para niños y familias",
     "INTRO_DESC": "Ofrezco yoga infantil y meditación adaptada a cada edad en Münchenbuchsee, con historias, movimiento, respiración y tiempo para relajarse.",
     "ABOUT_TITLE": "Yoga y meditación para mentes jóvenes",
     "ABOUT_DESC": "Cada sesión combina yoga lúdico, atención plena y relajación en un entorno seguro y acogedor donde los niños pueden moverse, imaginar y ser ellos mismos.",
+    "BREATH_SUBTITLE": "Un momento de calma",
+    "BREATH_TITLE": "Inhala, exhala",
+    "BREATH_DESC": "Desplázate despacio y sigue el orbe: se abre cuando inhalas y se recoge cuando exhalas. Los niños aprenden este ritmo en la primera sesión.",
+    "BREATH_STEPS": "Inhala cuatro tiempos, mantén cuatro y exhala seis.",
     "STYLES_TITLE": "Elige un comienzo tranquilo",
     "STYLES_DESC": "Descubre yoga infantil, meditación tranquila y baños de sonido para descansar, conectar y disfrutar del bienestar.",
     "BENEFITS_TITLE": "Por qué las familias eligen estas sesiones",
     "BENEFITS": {
-      "PERSONAL": { "TITLE": "Una forma segura y lúdica", "DESC": "Acompañamiento cálido, movimiento imaginativo y prácticas adecuadas para cada niño." },
-      "FLEXIBLE": { "TITLE": "Para niños y familias", "DESC": "Sesiones pensadas para pequeños yoguis, padres y momentos compartidos de conexión." },
-      "STRESS": { "TITLE": "Calma y confianza", "DESC": "Respiración, relajación y movimiento consciente para ayudar a los niños a sentirse seguros." }
+      "PERSONAL": {
+        "TITLE": "Una forma segura y lúdica",
+        "DESC": "Acompañamiento cálido, movimiento imaginativo y prácticas adecuadas para cada niño."
+      },
+      "FLEXIBLE": {
+        "TITLE": "Para niños y familias",
+        "DESC": "Sesiones pensadas para pequeños yoguis, padres y momentos compartidos de conexión."
+      },
+      "STRESS": {
+        "TITLE": "Calma y confianza",
+        "DESC": "Respiración, relajación y movimiento consciente para ayudar a los niños a sentirse seguros."
+      }
     },
     "CONTACT_TITLE": "¿Listo para comenzar?",
     "CONTACT_SUCCESS": "¡Gracias! Tu solicitud de clase ya está en camino.",
@@ -54,10 +71,22 @@
     "SOCIAL_INSTAGRAM_YOGA": "M.omkari Yoga y Sonido",
     "SOCIAL_INSTAGRAM_KIDS": "M.omkari Kids",
     "STYLES": {
-      "FAMILY_YOGA": { "NAME": "Yoga familiar", "DESC": "Ejercicios en pareja, estiramientos suaves y respiración para niños y padres." },
-      "KIDS_STORY": { "NAME": "Yoga con historias para niños", "DESC": "Aventuras divertidas, posturas de animales y movimiento imaginativo para pequeños aprendices." },
-      "KIDS_MEDITATION": { "NAME": "Meditación para niños", "DESC": "Una introducción suave a la quietud, la respiración y la escucha consciente para niños." },
-      "SOUND_BATH": { "NAME": "Baño de sonido", "DESC": "Relájate con el sonido cálido de los cuencos y momentos de calma para toda la familia." }
+      "FAMILY_YOGA": {
+        "NAME": "Yoga familiar",
+        "DESC": "Ejercicios en pareja, estiramientos suaves y respiración para niños y padres."
+      },
+      "KIDS_STORY": {
+        "NAME": "Yoga con historias para niños",
+        "DESC": "Aventuras divertidas, posturas de animales y movimiento imaginativo para pequeños aprendices."
+      },
+      "KIDS_MEDITATION": {
+        "NAME": "Meditación para niños",
+        "DESC": "Una introducción suave a la quietud, la respiración y la escucha consciente para niños."
+      },
+      "SOUND_BATH": {
+        "NAME": "Baño de sonido",
+        "DESC": "Relájate con el sonido cálido de los cuencos y momentos de calma para toda la familia."
+      }
     }
   }
 }

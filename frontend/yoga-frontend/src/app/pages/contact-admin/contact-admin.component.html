@@ -5,7 +5,7 @@
   </header>
 
   <div class="status" *ngIf="loading()">{{ 'LANDING.SENDING' | translate }}</div>
-  
+
   <table *ngIf="messageList.length">
     <thead>
       <tr>
@@ -18,7 +18,8 @@
     <tbody>
       <tr *ngFor="let msg of messageList">
         <td>
-          <strong>{{ msg.name }}</strong><br>
+          <strong>{{ msg.name }}</strong
+          ><br />
           <small>{{ msg.email }}</small>
         </td>
         <td>
@@ -26,18 +27,23 @@
           <div class="msg-meta">{{ msg.created_at | date: 'mediumDate' }}</div>
         </td>
         <td>
-          <span class="status-badge" [ngClass]="msg.status">{{ msg.status }}</span><br>
+          <span class="status-badge" [ngClass]="msg.status">{{ msg.status }}</span
+          ><br />
           <small (click)="assign(msg)" style="cursor: pointer; text-decoration: underline">
             {{ msg.assignee || 'Unassigned' }}
           </small>
         </td>
         <td>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem">
             <a [href]="mailtoLink(msg.email, msg.name, msg.message)" class="reply-link">REPLY</a>
-            
+
             <div>
-              <button class="btn-action" *ngIf="msg.status !== 'read'" (click)="markRead(msg)">Read</button>
-              <button class="btn-action" *ngIf="msg.status === 'read'" (click)="markUnread(msg)">Unread</button>
+              <button class="btn-action" *ngIf="msg.status !== 'read'" (click)="markRead(msg)">
+                Read
+              </button>
+              <button class="btn-action" *ngIf="msg.status === 'read'" (click)="markUnread(msg)">
+                Unread
+              </button>
               <button (click)="delete(msg)" class="btn-action danger">Delete</button>
             </div>
           </div>

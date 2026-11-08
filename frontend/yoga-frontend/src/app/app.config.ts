@@ -23,13 +23,10 @@ export function HttpLoaderFactory() {
 export const appConfig: ApplicationConfig = {
   providers: [
     // REGISTER THE INTERCEPTOR HERE
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([authInterceptor]) 
-    ),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    
+
     provideTranslateService({
       defaultLanguage: 'en',
       loader: {
@@ -41,8 +38,8 @@ export const appConfig: ApplicationConfig = {
           } else {
             return new ServerTranslateLoader();
           }
-        }
-      }
-    })
+        },
+      },
+    }),
   ],
 };
