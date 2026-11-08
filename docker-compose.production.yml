@@ -1,0 +1,104 @@
+# Production stack for the NAS.
+#
+#   docker compose -f docker-compose.production.yml up -d --build
+#
+# Nothing is published to the internet: the only public entry point is the
+# Cloudflare Tunnel (cloudflared), which connects outbound to Cloudflare and
+# forwards requests to the nginx container. PostgreSQL is reachable only by the
+# API container, on a network the tunnel cannot see.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-restart: &restart unless-stopped
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: yoga_app_db
+    restart: *restart
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+      TZ: ${TZ:-Europe/Zurich}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Runs only when the volume is empty (first boot).
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - db-net
+    logging: *logging
+    security_opt:
+      - no-new-privileges:true
+
+  backend:
+    build:
+      context: ./backend
+    container_name: yoga-api
+    restart: *restart
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+      GIN_MODE: release
+      TZ: ${TZ:-Europe/Zurich}
+    networks:
+      - db-net
+      - web-net
+    logging: *logging
+    security_opt:
+      - no-new-privileges:true
+
+  frontend:
+    build:
+      context: ./frontend/yoga-frontend
+    container_name: yoga-ui
+    restart: *restart
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      # LAN-only convenience. The public site never uses this port.
+      - "${LAN_BIND:-127.0.0.1}:${LAN_PORT:-5007}:80"
+    networks:
+      - web-net
+    logging: *logging
+    security_opt:
+      - no-new-privileges:true
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: yoga-tunnel
+    restart: *restart
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:?set CLOUDFLARE_TUNNEL_TOKEN in .env}
+    depends_on:
+      frontend:
+        condition: service_healthy
+    networks:
+      - web-net
+    logging: *logging
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  db_data:
+
+networks:
+  # Database traffic: postgres <-> API only.
+  db-net:
+    internal: true
+  # Public traffic: Cloudflare Tunnel -> nginx -> API.
+  web-net:

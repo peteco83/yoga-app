@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -112,14 +116,20 @@ func main() {
 
 	r := gin.Default()
 
-	// Allow the local NAS frontend origin as well as local development origins.
+	// Requests arrive through nginx inside the Compose network: trust the
+	// private ranges so the logs show the visitor instead of the proxy.
+	if err := r.SetTrustedProxies([]string{"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}); err != nil {
+		log.Printf("could not configure trusted proxies: %v", err)
+	}
+
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost", "http://localhost:4200", "http://localhost:8081", "http://192.168.1.20:5007"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowOrigins:     allowedOrigins(),
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Authorization", "Content-Type"},
 		AllowCredentials: true,
 	}))
 
+	r.GET("/health", health)
 	r.POST("/login", login)
 	r.POST("/contact", contact)
 
@@ -137,7 +147,63 @@ func main() {
 		protected.PATCH("/contact-messages/:id/assign", assignContactMessage)
 	}
 
-	r.Run(":8080")
+	srv := &http.Server{
+		Addr:              ":8080",
+		Handler:           r,
+		ReadHeaderTimeout: 10 * time.Second,
+	}
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+	log.Printf("API listening on %s", srv.Addr)
+
+	// Docker sends SIGTERM on every redeploy: finish in-flight requests first.
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+	<-stop
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Printf("graceful shutdown failed: %v", err)
+	}
+	log.Println("API stopped")
+}
+
+// allowedOrigins reads extra browser origins from ALLOWED_ORIGINS (comma
+// separated). The public site calls /api on its own origin, so it needs no
+// entry; the defaults only cover local development.
+func allowedOrigins() []string {
+	origins := []string{}
+	for _, origin := range strings.Split(os.Getenv("ALLOWED_ORIGINS"), ",") {
+		if trimmed := strings.TrimSpace(origin); trimmed != "" {
+			origins = append(origins, trimmed)
+		}
+	}
+	if len(origins) == 0 {
+		origins = []string{
+			"http://localhost",
+			"http://localhost:4200",
+			"http://localhost:8081",
+			"http://localhost:5007",
+		}
+	}
+	return origins
+}
+
+// health is polled by Docker Compose and can be used as an uptime check.
+func health(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+	defer cancel()
+	if err := db.PingContext(ctx); err != nil {
+		log.Printf("health check failed: %v", err)
+		c.JSON(http.StatusServiceUnavailable, gin.H{"status": "unhealthy"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
 func login(c *gin.Context) {

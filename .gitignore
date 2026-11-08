@@ -7,3 +7,7 @@ frontend/yoga-frontend/node_modules/
 frontend/yoga-frontend/dist/
 backend/main
 backend/backend
+
+# Runtime artefacts
+backups/
+.DS_Store

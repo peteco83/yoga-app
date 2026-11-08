@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Admin area: no value for search engines.
+Disallow: /login
+Disallow: /admin
