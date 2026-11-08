@@ -1,0 +1,11 @@
+# Local `go build` output (api from the Dockerfile, backend from ./build.sh):
+# never ship a host binary in the build context - it is the wrong architecture
+# for the NAS and only slows the build down.
+api
+backend
+*.exe
+*.test
+*.out
+.DS_Store
+.git
+.gitignore

@@ -43,6 +43,22 @@ docker compose -f docker-compose.production.yml up -d --build
 Step-by-step runbook (DNS, tunnel, Access, backups, troubleshooting):
 **[DEPLOY-NAS.md](DEPLOY-NAS.md)**.
 
+The NAS share `docker` is mounted on this Mac at `/Volumes/docker`, so the
+deployment folder is `/Volumes/docker/yoga-app` (= `/volume1/docker/yoga-app` on
+the NAS). To push the current working tree there:
+
+```bash
+rsync -a --delete \
+  --exclude '/.env' --exclude '/.git/' --exclude '/backups/' --exclude '.DS_Store' \
+  --exclude '/backend/backend' --exclude '/backend/api' \
+  --exclude '/frontend/yoga-frontend/node_modules/' \
+  --exclude '/frontend/yoga-frontend/dist/' --exclude '/frontend/yoga-frontend/.angular/' \
+  ./ /Volumes/docker/yoga-app/
+```
+
+Then start/rebuild **on the NAS** (SSH or Portainer): Docker Desktop on this Mac
+builds `arm64` images, and the NAS runs `amd64`.
+
 Helper scripts:
 
 | Script | Purpose |

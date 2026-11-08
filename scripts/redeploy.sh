@@ -11,7 +11,13 @@ if [ ! -f .env ]; then
 fi
 
 echo "== fetching latest code =="
-git pull --ff-only
+# The folder can be a plain copy (pushed from the Mac over the SMB share)
+# instead of a git checkout; in that case the files are already up to date.
+if [ -d .git ] && command -v git >/dev/null 2>&1; then
+  git pull --ff-only
+else
+  echo "no .git in $(pwd) - building the files that are already here"
+fi
 
 echo "== building images =="
 docker compose -f "$COMPOSE_FILE" build

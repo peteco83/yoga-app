@@ -38,7 +38,7 @@ What that buys you:
 | Item | Notes |
 | --- | --- |
 | A domain | Its nameservers must be on Cloudflare (free plan is enough) |
-| NAS with Docker + Compose | UGOS Pro: App Center → Docker; or plain SSH |
+| NAS with Docker + Compose | UGOS Pro: App Center → Docker. UGOS also ships Portainer on `:9000`; SSH is **off** by default (enable it in the control panel) |
 | RAM / disk | ~2 GB free RAM for the first build, ~4 GB disk |
 
 Placeholders used below: `<your-domain.com>` and `<nas-ip>`.
@@ -88,12 +88,78 @@ Registrar** so DNS and billing live in one place (sold at cost, no markup).
 
 ## 3. Put the code on the NAS
 
+Both routes end at the same place: `/volume1/docker/yoga-app` with a filled-in
+`.env`. Pick one.
+
+### 3a. From a shell on the NAS (git)
+
+SSH is **off by default** on UGOS. Turn it on in the NAS UI (Control Panel →
+Terminal / SSH), then check it from your machine:
+
+```bash
+nc -z <nas-ip> 22 && echo "ssh is open"
+```
+
 ```bash
 ssh <user>@<nas-ip>
 sudo mkdir -p /volume1/docker
 cd /volume1/docker
 git clone https://github.com/peteco83/yoga-app.git
 cd yoga-app
+```
+
+Later updates are just `./scripts/redeploy.sh`.
+
+### 3b. From the Mac, through the mounted share (no SSH)
+
+If the NAS share is mounted (Finder → Connect to Server → `smb://<nas-ip>/docker`)
+it appears as `/Volumes/docker`, so this folder *is* the NAS folder:
+
+| On the Mac | On the NAS |
+| --- | --- |
+| `/Volumes/docker/yoga-app` | `/volume1/docker/yoga-app` |
+
+Push the working tree over and let `rsync --delete` remove files that no longer
+belong (old compose files, renamed components):
+
+```bash
+cd ~/Projects/yoga-app
+rsync -a --delete \
+  --exclude '/.env' --exclude '/.git/' --exclude '/backups/' --exclude '.DS_Store' \
+  --exclude '/backend/backend' --exclude '/backend/api' \
+  --exclude '/frontend/yoga-frontend/node_modules/' \
+  --exclude '/frontend/yoga-frontend/dist/' --exclude '/frontend/yoga-frontend/.angular/' \
+  ./ /Volumes/docker/yoga-app/
+```
+
+Why those excludes are not cosmetic:
+
+- `/.env` holds the NAS secrets. Copying it from the Mac silently replaces the
+  database password of a *running* database with a different one.
+- `dist/`, `.angular/` and `backend/backend` are host build output. The Mac is
+  `arm64`, the NAS is `x86_64`: shipping them wastes 30+ MB and can mask a broken
+  build (`exec format error` inside the container).
+
+> **Images must be built on the NAS, not on the Mac.** Docker Desktop builds
+> `linux/arm64`; the NAS needs `linux/amd64`. Build over SSH/Portainer on the NAS
+> and the architecture is correct automatically. Only if you deliberately prebuild
+> on the Mac, force the platform (see Appendix A).
+
+> Files written over SMB arrive as `rwxrwxrwx`; that is fine, nothing outside the
+> containers reads them.
+
+**If you do not want SSH either:** Portainer already runs on
+`http://<nas-ip>:9000`. *Stacks → Add stack → Repository* →
+`https://github.com/peteco83/yoga-app`, compose path
+`docker-compose.production.yml`, and put the `.env` values in the *Environment
+variables* section. Redeploy with *Pull and redeploy*. The NAS then builds from
+its own clone, so treat that clone — not the SMB folder — as the source of truth.
+
+### 3c. Fill in `.env`
+
+On the NAS (or through the share, editing `/Volumes/docker/yoga-app/.env`):
+
+```bash
 cp .env.example .env
 openssl rand -base64 48          # copy the output into JWT_SECRET
 nano .env                        # fill in the values below
@@ -126,6 +192,12 @@ openssl rand -base64 32 | tr -d '/+=' | cut -c1-32
 cd /volume1/docker/yoga-app
 docker compose -f docker-compose.production.yml up -d --build
 ```
+
+> **Already deployed once from this folder?** Compose names the volume after the
+> project directory (`yoga-app_db_data`), so an existing volume — including one
+> created by the old `docker-compose.nas.yml` — is reused as-is: `init.sql` does
+> not run again and the data stays. The `POSTGRES_PASSWORD` in `.env` must then be
+> the one the database was created with (keep the value that was already there).
 
 The first build downloads the Node and Go images and compiles the site: expect
 3–10 minutes on a NAS. Then:
@@ -307,6 +379,8 @@ want to include the database in the check.
 | Old page after a deploy | Browser or Cloudflare cache | Purge Cloudflare cache; hard reload (`index.html` is `no-cache`) |
 | `relation "admins" does not exist` | `init.sql` only runs on an empty volume | `docker compose ... down` then remove the `db_data` volume, or apply `database/init.sql` by hand |
 | Backend restart loop with `JWT_SECRET must be configured` | `.env` missing or not loaded | Run compose from the folder that holds `.env` |
+| Container exits with `exec format error` | The image was built on a Mac (`arm64`) instead of the NAS (`amd64`) | Rebuild on the NAS, or `docker build --platform linux/amd64` (Appendix A) |
+| `cp: .env` overwrote the password and the API cannot log in | The Mac copy was synced over the NAS `.env` | Restore `.env` from the backup, or `ALTER USER` (row above); the rsync in 3b excludes `/.env` for this reason |
 | Contact form works but you get no email | By design: messages are stored only | Read them on the **Messages** page (`/admin/messages`) |
 
 Useful one-liners:
@@ -345,8 +419,9 @@ laptop or in CI and push to the GitHub Container Registry, then run the NAS with
 ```bash
 # on your machine
 echo "$GH_TOKEN" | docker login ghcr.io -u <github-user> --password-stdin
-docker build -t ghcr.io/peteco83/yoga-api:latest ./backend
-docker build -t ghcr.io/peteco83/yoga-ui:latest ./frontend/yoga-frontend
+# --platform is mandatory: an Apple Silicon laptop builds arm64, the NAS is amd64
+docker build --platform linux/amd64 -t ghcr.io/peteco83/yoga-api:latest ./backend
+docker build --platform linux/amd64 -t ghcr.io/peteco83/yoga-ui:latest ./frontend/yoga-frontend
 docker push ghcr.io/peteco83/yoga-api:latest
 docker push ghcr.io/peteco83/yoga-ui:latest
 ```

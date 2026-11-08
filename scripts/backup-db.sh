@@ -13,10 +13,15 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-set -a
-# shellcheck disable=SC1091
-. ./.env
-set +a
+# Read .env without `source`: a password containing & ! $ or a space is valid
+# for Docker (which parses the file itself) but would break shell sourcing.
+env_get() {
+  sed -n "s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*//p" .env | tail -n 1 |
+    sed -e 's/^"\(.*\)"$/\1/' -e "s/^'\(.*\)'$/\1/" -e 's/[[:space:]]*$//'
+}
+
+POSTGRES_USER=$(env_get POSTGRES_USER)
+POSTGRES_DB=$(env_get POSTGRES_DB)
 
 mkdir -p backups
 file="backups/${POSTGRES_DB:-yoga_app}-$(date +%Y%m%d-%H%M%S).sql.gz"
