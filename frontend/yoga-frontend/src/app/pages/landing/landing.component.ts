@@ -263,7 +263,7 @@ export class LandingComponent {
     },
     {
       key: 'SOUND_BATH',
-      image: '/assets/images/sound-bath.png',
+      image: '/assets/images/kids-sound-bowl.webp',
     },
   ];
 
