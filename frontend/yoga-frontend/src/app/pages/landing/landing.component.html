@@ -79,7 +79,7 @@
       appScrollRevealStagger="0.14"
     >
       @for (style of styles; track style.key) {
-        <article class="landing__card">
+        <article class="landing__card" [attr.data-style]="style.key">
           <img
             [ngSrc]="style.image"
             width="400"

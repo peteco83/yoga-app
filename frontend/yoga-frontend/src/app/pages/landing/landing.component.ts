@@ -203,10 +203,12 @@ export class LandingComponent {
         stylesGrid.querySelectorAll<HTMLElement>('.landing__image').forEach((image) => {
           gsap.fromTo(
             image,
-            { scale: 1.1, yPercent: -3 },
+            // Just enough zoom to hide the drift: the artwork is the content
+            // here, so any extra scale reads as "the card is cropping it".
+            { scale: 1.05, yPercent: -1.5 },
             {
-              scale: 1.02,
-              yPercent: 3,
+              scale: 1.04,
+              yPercent: 1.5,
               ease: 'none',
               scrollTrigger: {
                 trigger: image,

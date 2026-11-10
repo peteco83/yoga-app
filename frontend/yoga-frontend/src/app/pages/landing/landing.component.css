@@ -384,6 +384,15 @@ h2 {
   border-bottom: 1px solid rgba(76, 63, 98, 0.08);
 }
 
+/*
+ * The Sound Bath artwork is framed tighter than the rest and the hair touches
+ * the top edge, so anchor the crop to the top instead of centring it: the
+ * 4:3 box only trims the rug at the bottom.
+ */
+.landing__card[data-style='SOUND_BATH'] .landing__image {
+  object-position: 50% 0;
+}
+
 .landing__card-content {
   padding: 1.75rem;
 }
